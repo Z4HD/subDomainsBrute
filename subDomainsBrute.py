@@ -1,7 +1,7 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- encoding: utf-8 -*-
 """
-    subDomainsBrute 1.0.6
+    subDomainsBrute 1.0.6 -Python3 ver.
     A simple and fast sub domains brute tool for pentesters
     my[at]lijiejie.com (http://www.lijiejie.com)
 """
@@ -52,10 +52,10 @@ class SubNameBrute:
         self.ex_resolver.nameservers = self.dns_servers
 
     def _load_dns_servers(self):
-        print '[+] Validate DNS servers ...'
+        print('[+] Validate DNS servers ...')
         self.dns_servers = []
         pool = Pool(30)
-        for server in open('dict/dns_servers.txt').xreadlines():
+        for server in open('dict/dns_servers.txt'):
             server = server.strip()
             if server:
                 pool.apply_async(self._test_server, (server,))
@@ -63,9 +63,9 @@ class SubNameBrute:
 
         self.dns_count = len(self.dns_servers)
         sys.stdout.write('\n')
-        print '[+] Found %s available DNS Servers in total' % self.dns_count
+        print('[+] Found %s available DNS Servers in total' % self.dns_count)
         if self.dns_count == 0:
-            print '[ERROR] No DNS Servers available.'
+            print('[ERROR] No DNS Servers available.')
             sys.exit(-1)
 
     def _test_server(self, server):
@@ -106,7 +106,7 @@ class SubNameBrute:
         regex_list = []
         lines = set()
         with open(_file) as f:
-            for line in f.xreadlines():
+            for line in f:
                 sub = line.strip()
                 if not sub or sub in lines:
                     continue
@@ -238,7 +238,7 @@ class SubNameBrute:
                 _sub = sub.split('.')[-1]
                 try:
                     answers = self.resolvers[j].query(cur_sub_domain)
-                except dns.resolver.NoAnswer, e:
+                except dns.resolver.NoAnswer as e:
                     answers = self.ex_resolver.query(cur_sub_domain)
 
                 if answers:
@@ -304,7 +304,7 @@ class SubNameBrute:
 
         try:
             gevent.joinall(threads)
-        except KeyboardInterrupt, e:
+        except KeyboardInterrupt as e:
             msg = '[WARNING] User aborted.'
             sys.stdout.write('\r' + msg + ' ' * (self.console_width - len(msg)) + '\n\r')
             sys.stdout.flush()
